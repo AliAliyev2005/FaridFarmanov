@@ -168,7 +168,6 @@ function Document() {
 
 	return (
 		<div className="document">
-			<h1>Ali</h1>
 			<MyForm stocks={stocks} initialValues={documentsItem} />
 
 			{isLoading && <MyLoading />}
