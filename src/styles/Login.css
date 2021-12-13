@@ -1,0 +1,27 @@
+#root {
+	background: var(--dark);
+}
+
+.container-form {
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+form label {
+	font-weight: 400;
+	color: #fff !important;
+}
+
+.ant-form-item {
+	margin: 1rem;
+}
+
+.submit-button {
+	width: 100%;
+}
+
+.ant-form-item .ant-form-item-label {
+	padding: 0;
+}

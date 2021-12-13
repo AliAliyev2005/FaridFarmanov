@@ -132,7 +132,6 @@ function Document() {
 			};
 		});
 		data.positions = newArr;
-		// console.log(data)
 		sendRequest("demands/put.php", data);
 	};
 	const getQuantity = async (data) => {
@@ -171,101 +170,28 @@ function Document() {
 			<MyForm stocks={stocks} initialValues={documentsItem} />
 
 			{isLoading && <MyLoading />}
-			<div className="debt">
-				<p>
-					Qalıq borc:
-					<strong>
-						{debt} <sub>₼</sub>
-					</strong>
-				</p>
-			</div>
+            
+            <Debt debt={debt} />
 
 			<ProductList
+				setModalProductListForSelect={setModalProductListForSelect}
 				isFooterOpen={isFooterOpen}
 				products={products}
 				getDataForUpdateModal={getDataForUpdateModal}
 				setIsModal2Open={setIsModal2Open}
 			/>
-			<div
-				className={
-					isFooterOpen ? "doc-footer doc-footer-open" : "doc-footer"
-				}
-			>
-				<div
-					className="line"
-					onClick={() => setIsFoterOpen(!isFooterOpen)}
-				>
-					<img src={line_img} alt="" />
-				</div>
-				<div
-					className="texts"
-					onClick={() => setIsFoterOpen(!isFooterOpen)}
-				>
-					<div className="text-block">
-						<p className="text">Ümumi məbləğ:</p>
-						<p className="number">{totalPrice}</p>
-					</div>
-					<div className="text-block">
-						<p className="text">Endirim:</p>
-						<p className="number"></p>
-					</div>
-					<div className="text-block-important">
-						<p className="text">Yekun məbləğ:</p>
-						<p className="number"></p>
-					</div>
-					<div className="text-block">
-						<p className="text">Miqdar</p>
-						<p className="number">{totalQuantity}</p>
-					</div>
-					<div className="text-block">
-						<p className="text">Mayası:</p>
-						<p className="number"></p>
-					</div>
-					<div className="text-block">
-						<p className="text">Qazanc:</p>
-						<p className="number"></p>
-					</div>
-				</div>
-				<div className="submit-buttons">
-					<button className="close">
-						<div>
-							<img src={close_img} alt="" />
-						</div>
-						<p>Bağla</p>
-					</button>
-					<button className="print">
-						<div>
-							<img src={print_img} alt="" />
-						</div>
-						<p>Print</p>
-					</button>
-					<button className="save">
-						<div>
-							<img src={save_img} alt="" />
-						</div>
-						<p>Yadda saxla</p>
-					</button>
-				</div>
-
-				{/* <button
-					onClick={() => {
-						setModalProductListForSelect(true);
-					}}
-					style={{ backgroundColor: "blue", fontSize: "20px" }}
-				>
-					Məhsul əlavə et
-				</button>
-				<div>
-					<p>Toplam Məbləğ: </p>
-					<p>Miqdar: </p>
-				</div> */}
-			</div>
+			<DocFooter
+				isFooterOpen={isFooterOpen}
+				setIsFoterOpen={setIsFoterOpen}
+				totalQuantity={totalQuantity}
+				totalPrice={totalPrice}
+			/>
 
 			<MyModal
 				visible={modalProductListForSelect}
 				setVisible={setModalProductListForSelect}
 			>
-				<ProductListForSelect selectPrd={selectPrd} />
+				<ProductListForSelect close={setModalProductListForSelect} selectPrd={selectPrd} />
 			</MyModal>
 
 			<MyModal visible={modalPrint} setVisible={setModalPrint}>
@@ -276,48 +202,89 @@ function Document() {
 					<button>78 mm</button>
 				</div>
 			</MyModal>
-
-			{isModal2Open && (
-				<MyModal
-					data={dataForUpdateModal}
-					isModalOpen={isModal2Open}
-					closeModal={closeModal2}
-					getQuantity={getQuantity}
-				/>
-			)}
 		</div>
-		// <div>
-		// 	<MyForm initialValues={documentsItem} />
-
-		// 	<p>Qalıq borc ({debt})</p>
-
-		// 	{/* <ProductList products={products ? products.List[0].Positions : []} /> */}
-
-		//     <div>
-		//         <button>scaner</button>
-		//         <button onClick={() => setModal(true)} >mehsul elave et</button>
-		//     </div>
-
-		// 	<div>
-		// 		<div>Ümumi məbləğ: {documentsItem.Amount} </div>
-		// 		<div>Endirim: {documentsItem.Discount} </div>
-		// 		<div>Yekun məbləğ: </div>
-		// 		<div>Miqdar: {products.Count}</div>
-		// 		<div>Mayası: {} </div>
-		// 		<div>Qazanc: {products.AllProfit}</div>
-		// 	</div>
-
-		//     <MyModal visible={modal} setVisible={setModal}>
-		//         <ProductListForSelect selectPrd={selectPrd} />
-		//     </MyModal>
-
-		// </div>
 	);
 }
 
 export default Document;
 
+
+const Debt = ({debt}) => {
+    return (
+        <div className="debt">
+            <p>
+                Qalıq borc:
+                <strong>
+                    {debt} <sub>₼</sub>
+                </strong>
+            </p>
+        </div>
+    )
+}
+
+const DocFooter = (props) => {
+	return (
+		<div
+			onClick={() => props.setIsFoterOpen(!props.isFooterOpen)}
+			className={
+				props.isFooterOpen ? "doc-footer doc-footer-open" : "doc-footer"
+			}
+		>
+			<div className="line">
+				<img src={line_img} alt="" />
+			</div>
+			<div className="texts">
+				<div className="text-block">
+					<p className="text">Ümumi məbləğ:</p>
+					<p className="number">{props.totalPrice.toFixed(2)}</p>
+				</div>
+				<div className="text-block">
+					<p className="text">Endirim:</p>
+					<p className="number"></p>
+				</div>
+				<div className="text-block-important">
+					<p className="text">Yekun məbləğ:</p>
+					<p className="number"></p>
+				</div>
+				<div className="text-block">
+					<p className="text">Miqdar</p>
+					<p className="number">{props.totalQuantity}</p>
+				</div>
+				<div className="text-block">
+					<p className="text">Mayası:</p>
+					<p className="number"></p>
+				</div>
+				<div className="text-block">
+					<p className="text">Qazanc:</p>
+					<p className="number"></p>
+				</div>
+			</div>
+			<div className="submit-buttons">
+				<button className="close">
+					<div>
+						<img src={close_img} alt="" />
+					</div>
+					<p>Bağla</p>
+				</button>
+				<button className="print">
+					<div>
+						<img src={print_img} alt="" />
+					</div>
+					<p>Print</p>
+				</button>
+				<button className="save">
+					<div>
+						<img src={save_img} alt="" />
+					</div>
+					<p>Yadda saxla</p>
+				</button>
+			</div>
+		</div>
+	);
+};
+
 const ProductList = ({
+	setModalProductListForSelect,
 	products,
 	setIsModal2Open,
 	getDataForUpdateModal,
@@ -355,12 +322,16 @@ const ProductList = ({
 										</div>
 									</div>
 									<div className="number">
-										<p className="amount">
-											{Price * Quantity}$
-										</p>
-										<p className="quantity-price">
-											{Quantity}ed * {Price}$
-										</p>
+										<div className="amount">
+											<p>
+												{Price * Quantity}<sub>₼</sub>
+											</p>
+										</div>
+										<div className="quantity-price">
+											<p>
+												{Quantity}ed * {Price}<sub>₼</sub>
+											</p>
+										</div>
 									</div>
 								</Col>
 								<Col className="other" span={2}>
@@ -380,7 +351,10 @@ const ProductList = ({
 				<button className="add-barcode">
 					<img src={barcode_img} alt="" />
 				</button>
-				<button className="add-manual">
+				<button
+					onClick={() => setModalProductListForSelect(true)}
+					className="add-manual"
+				>
 					<img src={addProduct_img} alt="" />
 					<p>Məhsul əlavə et</p>
 				</button>
